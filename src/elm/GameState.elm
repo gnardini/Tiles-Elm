@@ -1,6 +1,7 @@
 module GameState exposing (..)
 
 import Board exposing (..)
+import Tile exposing (..)
 import Player exposing (..)
 
 import List exposing (..)
@@ -30,15 +31,18 @@ initialState =
 -- Called when there's a click on the UI over the board.
 onTouchReceived: GameState -> Int -> Int -> GameState
 onTouchReceived originalState x y = 
-    let
-        (newBoard, points) = onBoardTouched originalState.board x y (turnPlayer originalState)
-        newPlayer = updatedPlayer originalState points
-    in {
-    board = newBoard,
-    player1 = if originalState.playerTurn == 1 then newPlayer else originalState.player1,
-    player2 = if originalState.playerTurn == 2 then newPlayer else originalState.player2,
-    playerTurn = if originalState.playerTurn == 1 then 2 else 1,
-    seed = originalState.seed}
+    if (getTileAt originalState.board x y == Empty)
+    then originalState
+    else 
+        let
+            (newBoard, points) = onBoardTouched originalState.board x y (turnPlayer originalState)
+            newPlayer = updatedPlayer originalState points
+        in {
+        board = newBoard,
+        player1 = if originalState.playerTurn == 1 then newPlayer else originalState.player1,
+        player2 = if originalState.playerTurn == 2 then newPlayer else originalState.player2,
+        playerTurn = if originalState.playerTurn == 1 then 2 else 1,
+        seed = originalState.seed}
 
 updatedPlayer: GameState -> Int -> Player
 updatedPlayer gameState points =
@@ -52,3 +56,12 @@ turnPlayer gameState =
     if gameState.playerTurn == 1 
     then gameState.player1
     else gameState.player2
+
+applyGravityToTiles: GameState -> GameState
+applyGravityToTiles gameState = 
+    {gameState | board = 
+        gameState.board
+            |> applyColumnGravity
+            |> applyRowGravity}
+
+

@@ -66,7 +66,7 @@ getTileAttributes location tile =
 update : Action -> GameState -> (GameState, Cmd Action)
 update action gameState =
     case action of
-        Choose x y -> (onTouchReceived gameState x y, Cmd.none)
+        Choose x y -> (onTouchReceived gameState x y |> applyGravityToTiles, Cmd.none)
 
 
 
