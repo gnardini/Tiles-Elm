@@ -23,8 +23,8 @@ init = (initialState, Cmd.none)
 view : GameState -> Html Action
 view gameState =
     Html.div
-        []
-        [ div [] [text (playersText gameState)],
+        [boardAttributes]
+        [ div [scoreAttributes] [text (playersText gameState)],
         div [] (List.map htmlFromAttributes (stylesFromTiles gameState.board))]
 
 htmlFromAttributes: List (Html.Attribute Action) -> Html Action
@@ -39,7 +39,7 @@ playersText gameState =
 
 tileView: Tile -> Int -> Int -> List (String, String)
 tileView tile x y =
-    let 
+    let
         left = tileSizeInPx * x
         top = tileSizeInPx * y
     in
@@ -81,7 +81,7 @@ subscriptions model =
 
 main : Program Never
 main =
-    Html.App.program { 
+    Html.App.program {
         init = init,
         view = view,
         update = update,
