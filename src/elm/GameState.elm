@@ -18,7 +18,8 @@ type alias InGameState = {
 }
 
 type alias MenuState = {
-    text: String
+    text: String,
+    winner: Maybe String
 }
 
 -- Initial state of the game.
@@ -26,6 +27,7 @@ initialMenuState : GameState
 initialMenuState =
     Menu {
         text = "Play"
+        , winner = Nothing
     }
 
 initialInGameState : GameState
@@ -76,4 +78,14 @@ applyGravityToTiles gameState =
             |> applyColumnGravity
             |> applyRowGravity}
 
+checkGameOver : InGameState -> GameState
+checkGameOver inGameState =
+    if (getTileAt inGameState.board 0 (boardSize - 1) == Empty)
+    then Menu { text = "Play Again", winner = Just(winnerText inGameState) }
+    else InGame inGameState
 
+winnerText : InGameState -> String
+winnerText inGameState =
+    if inGameState.player1.points > inGameState.player2.points then "Player 1 wins."
+    else if inGameState.player1.points < inGameState.player2.points then "Player 2 wins"
+    else "Tie"

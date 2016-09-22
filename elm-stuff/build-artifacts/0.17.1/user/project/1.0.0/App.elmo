@@ -16,7 +16,7 @@ var _user$project$App$updateInGameBoard = F2(
 		if (_p1.ctor === 'Choose') {
 			return {
 				ctor: '_Tuple2',
-				_0: _user$project$GameState$InGame(
+				_0: _user$project$GameState$checkGameOver(
 					_user$project$GameState$applyGravityToTiles(
 						A3(_user$project$GameState$onTouchReceived, inGameState, _p1._0, _p1._1))),
 				_1: _elm_lang$core$Platform_Cmd$none

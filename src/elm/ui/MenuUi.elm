@@ -19,7 +19,14 @@ menuHtml : MenuState -> Html Action
 menuHtml menuState =
     Html.div
     [menuStyle, Html.Events.onClick (Action.StartGame)]
-    [div [playButtonStyle] [text menuState.text]]
+    [div [winnerTextStyle] [text (winnerText menuState.winner)]
+    , div [playButtonStyle] [text menuState.text]]
+
+winnerText : Maybe String -> String
+winnerText maybeWinner =
+  case maybeWinner of
+    Nothing -> ""
+    Just winner -> winner
 
 menuStyle : Html.Attribute msg
 menuStyle = centeredStyle menuButtonWidth menuButtonHeight
@@ -40,3 +47,14 @@ menuButtonStyle =
   , ("align-items", "center")
   , ("justify-content", "center")
   ]
+
+winnerTextStyle : Html.Attribute msg
+winnerTextStyle =
+  Html.Attributes.style
+    [("position", "relative")
+    , ("font-size", "25px")
+    , ("margin-bottom", "15px")
+    , ("display", "flex")
+    , ("align-items", "center")
+    , ("justify-content", "center")
+    ]

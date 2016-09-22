@@ -27,7 +27,10 @@ update action gameState =
 updateInGameBoard : Action -> InGameState -> (GameState, Cmd Action)
 updateInGameBoard action inGameState =
     case action of
-        Choose x y -> (InGame (onTouchReceived inGameState x y |> applyGravityToTiles), Cmd.none)
+        Choose x y -> (onTouchReceived inGameState x y
+            |> applyGravityToTiles
+            |> checkGameOver
+            , Cmd.none)
         StartGame -> (initialInGameState, Cmd.none)
 
 updateMenu : Action -> MenuState -> (GameState, Cmd Action)
