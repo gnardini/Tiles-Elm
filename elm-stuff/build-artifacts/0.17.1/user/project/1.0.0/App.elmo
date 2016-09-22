@@ -1,130 +1,48 @@
 var _user$project$App$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$App$updateMenu = F2(
+	function (action, menu) {
+		var _p0 = action;
+		if (_p0.ctor === 'Choose') {
+			return {ctor: '_Tuple2', _0: _user$project$GameState$initialMenuState, _1: _elm_lang$core$Platform_Cmd$none};
+		} else {
+			return {ctor: '_Tuple2', _0: _user$project$GameState$initialInGameState, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$App$updateInGameBoard = F2(
+	function (action, inGameState) {
+		var _p1 = action;
+		if (_p1.ctor === 'Choose') {
+			return {
+				ctor: '_Tuple2',
+				_0: _user$project$GameState$InGame(
+					_user$project$GameState$applyGravityToTiles(
+						A3(_user$project$GameState$onTouchReceived, inGameState, _p1._0, _p1._1))),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {ctor: '_Tuple2', _0: _user$project$GameState$initialInGameState, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
 var _user$project$App$update = F2(
 	function (action, gameState) {
-		var _p0 = action;
-		return {
-			ctor: '_Tuple2',
-			_0: _user$project$GameState$applyGravityToTiles(
-				A3(_user$project$GameState$onTouchReceived, gameState, _p0._0, _p0._1)),
-			_1: _elm_lang$core$Platform_Cmd$none
-		};
+		var _p2 = gameState;
+		if (_p2.ctor === 'InGame') {
+			return A2(_user$project$App$updateInGameBoard, action, _p2._0);
+		} else {
+			return A2(_user$project$App$updateMenu, action, _p2._0);
+		}
 	});
-var _user$project$App$tileView = F3(
-	function (tile, x, y) {
-		var top = _user$project$UI$tileSizeInPx * y;
-		var left = _user$project$UI$tileSizeInPx * x;
-		return _elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-				{
-				ctor: '_Tuple2',
-				_0: 'width',
-				_1: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(_user$project$UI$tileSizeInPx),
-					'px')
-			},
-				{
-				ctor: '_Tuple2',
-				_0: 'height',
-				_1: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(_user$project$UI$tileSizeInPx),
-					'px')
-			},
-				{
-				ctor: '_Tuple2',
-				_0: 'marginTop',
-				_1: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(top),
-					'px')
-			},
-				{
-				ctor: '_Tuple2',
-				_0: 'marginLeft',
-				_1: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(left),
-					'px')
-			},
-				{
-				ctor: '_Tuple2',
-				_0: 'backgroundColor',
-				_1: _user$project$UI$toRgbaString(
-					_user$project$UI$tileColor(tile))
-			}
-			]);
-	});
-var _user$project$App$getTileAttributes = F2(
-	function (location, tile) {
-		return _elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$style(
-				A3(
-					_user$project$App$tileView,
-					tile,
-					_chendrix$elm_matrix$Matrix$row(location),
-					_chendrix$elm_matrix$Matrix$col(location))),
-				_elm_lang$html$Html_Events$onClick(
-				A2(
-					_user$project$Action$Choose,
-					_chendrix$elm_matrix$Matrix$row(location),
-					_chendrix$elm_matrix$Matrix$col(location)))
-			]);
-	});
-var _user$project$App$stylesFromTiles = function (tiles) {
-	return _chendrix$elm_matrix$Matrix$flatten(
-		A2(_chendrix$elm_matrix$Matrix$mapWithLocation, _user$project$App$getTileAttributes, tiles));
-};
-var _user$project$App$playersText = function (gameState) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		'Player 1: ',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(gameState.player1.points),
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				' - Player2: ',
-				_elm_lang$core$Basics$toString(gameState.player2.points))));
-};
-var _user$project$App$htmlFromAttributes = function (attributes) {
-	return A2(
-		_elm_lang$html$Html$div,
-		attributes,
-		_elm_lang$core$Native_List.fromArray(
-			[]));
-};
 var _user$project$App$view = function (gameState) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[_user$project$UI$boardAttributes]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[_user$project$UI$scoreAttributes]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						_user$project$App$playersText(gameState))
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				A2(
-					_elm_lang$core$List$map,
-					_user$project$App$htmlFromAttributes,
-					_user$project$App$stylesFromTiles(gameState.board)))
-			]));
+	var _p3 = gameState;
+	if (_p3.ctor === 'InGame') {
+		return _user$project$BoardUi$boardHtml(_p3._0);
+	} else {
+		return _user$project$MenuUi$menuHtml(_p3._0);
+	}
 };
-var _user$project$App$init = {ctor: '_Tuple2', _0: _user$project$GameState$initialState, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$App$init = {ctor: '_Tuple2', _0: _user$project$GameState$initialMenuState, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$App$main = {
 	main: _elm_lang$html$Html_App$program(
 		{init: _user$project$App$init, view: _user$project$App$view, update: _user$project$App$update, subscriptions: _user$project$App$subscriptions})

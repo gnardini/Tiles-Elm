@@ -1,83 +1,44 @@
 module App exposing (..)
 
-import GameState exposing (..)
-import Tile exposing (..)
-import UI exposing (..)
-import Player exposing (..)
-import Action exposing (..)
+import MenuUi exposing (menuHtml)
+import BoardUi exposing (boardHtml)
 
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
-import Html.Attributes
+import GameState exposing (..)
+import Action exposing (Action (..))
+
+import Html exposing (Html)
 import Html.App
 
-import Matrix exposing (..)
-import List exposing (..)
-
 init : (GameState, Cmd Action)
-init = (initialState, Cmd.none)
-
--- VIEW
-
+init = (initialMenuState, Cmd.none)
 
 view : GameState -> Html Action
 view gameState =
-    Html.div
-        [boardAttributes]
-        [ div [scoreAttributes] [text (playersText gameState)],
-        div [] (List.map htmlFromAttributes (stylesFromTiles gameState.board))]
-
-htmlFromAttributes: List (Html.Attribute Action) -> Html Action
-htmlFromAttributes attributes =
-        Html.div
-            attributes
-            [ ]
-
-playersText: GameState -> String
-playersText gameState =
-    "Player 1: " ++ toString gameState.player1.points ++ " - Player2: " ++ toString gameState.player2.points
-
-tileView: Tile -> Int -> Int -> List (String, String)
-tileView tile x y =
-    let
-        left = tileSizeInPx * x
-        top = tileSizeInPx * y
-    in
-        [("position", "absolute"),
-        ("width", toString tileSizeInPx ++ "px"),
-        ("height", toString tileSizeInPx ++ "px"),
-        ("marginTop", toString top ++ "px"),
-        ("marginLeft", toString left ++ "px"),
-        ("backgroundColor", toRgbaString (tileColor tile))]
-
-stylesFromTiles : Matrix Tile -> List (List (Html.Attribute Action))
-stylesFromTiles tiles =
-    flatten (mapWithLocation getTileAttributes tiles)
-
-
-getTileAttributes: Location -> Tile -> List (Html.Attribute Action)
-getTileAttributes location tile =
-    [Html.Attributes.style (tileView tile (row location) (col location)),
-    Html.Events.onClick (Choose (row location) (col location))]
-
--- UPDATE
-
+    case gameState of
+        InGame inGameState -> BoardUi.boardHtml inGameState
+        Menu menuState -> MenuUi.menuHtml menuState
 
 update : Action -> GameState -> (GameState, Cmd Action)
 update action gameState =
+    case gameState of
+        InGame inGameState -> updateInGameBoard action inGameState
+        Menu menuState -> updateMenu action menuState
+
+updateInGameBoard : Action -> InGameState -> (GameState, Cmd Action)
+updateInGameBoard action inGameState =
     case action of
-        Choose x y -> (onTouchReceived gameState x y |> applyGravityToTiles, Cmd.none)
+        Choose x y -> (InGame (onTouchReceived inGameState x y |> applyGravityToTiles), Cmd.none)
+        StartGame -> (initialInGameState, Cmd.none)
 
-
-
--- SUBSCRIPTIONS
+updateMenu : Action -> MenuState -> (GameState, Cmd Action)
+updateMenu action menu =
+    case action of
+        Choose _ _ -> (initialMenuState, Cmd.none)
+        StartGame -> (initialInGameState, Cmd.none)
 
 subscriptions : GameState -> Sub Action
 subscriptions model =
     Sub.none
-
--- MAIN
-
 
 main : Program Never
 main =
@@ -87,4 +48,3 @@ main =
         update = update,
         subscriptions = subscriptions
     }
-

@@ -7,7 +7,9 @@ import Player exposing (..)
 import List exposing (..)
 import Random exposing (..)
 
-type alias GameState = {
+type GameState = InGame InGameState | Menu MenuState
+
+type alias InGameState = {
     board: Board,
     player1: Player,
     player2: Player,
@@ -15,13 +17,23 @@ type alias GameState = {
     seed: Seed
 }
 
+type alias MenuState = {
+    text: String
+}
+
 -- Initial state of the game.
-initialState: GameState
-initialState = 
-    let 
+initialMenuState : GameState
+initialMenuState =
+    Menu {
+        text = "Play"
+    }
+
+initialInGameState : GameState
+initialInGameState =
+    let
         firstSeed = initialSeed 1234
         (firstBoard, afterInitSeed) = initialBoard firstSeed
-    in {
+    in InGame {
     board = firstBoard,
     player1 = createPlayer,
     player2 = createPlayer,
@@ -29,11 +41,11 @@ initialState =
     seed = afterInitSeed}
 
 -- Called when there's a click on the UI over the board.
-onTouchReceived: GameState -> Int -> Int -> GameState
-onTouchReceived originalState x y = 
+onTouchReceived: InGameState -> Int -> Int -> InGameState
+onTouchReceived originalState x y =
     if (getTileAt originalState.board x y == Empty)
     then originalState
-    else 
+    else
         let
             (newBoard, points) = onBoardTouched originalState.board x y (turnPlayer originalState)
             newPlayer = updatedPlayer originalState points
@@ -44,22 +56,22 @@ onTouchReceived originalState x y =
         playerTurn = if originalState.playerTurn == 1 then 2 else 1,
         seed = originalState.seed}
 
-updatedPlayer: GameState -> Int -> Player
+updatedPlayer: InGameState -> Int -> Player
 updatedPlayer gameState points =
     if gameState.playerTurn == 1
     then addPoints gameState.player1 points
     else addPoints gameState.player2 points
 
 -- Returns the player that owns the turn on |gameState|.
-turnPlayer: GameState -> Player
-turnPlayer gameState = 
-    if gameState.playerTurn == 1 
+turnPlayer: InGameState -> Player
+turnPlayer gameState =
+    if gameState.playerTurn == 1
     then gameState.player1
     else gameState.player2
 
-applyGravityToTiles: GameState -> GameState
-applyGravityToTiles gameState = 
-    {gameState | board = 
+applyGravityToTiles: InGameState -> InGameState
+applyGravityToTiles gameState =
+    {gameState | board =
         gameState.board
             |> applyColumnGravity
             |> applyRowGravity}
