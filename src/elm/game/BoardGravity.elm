@@ -8,6 +8,10 @@ import GameState exposing (GameState (..), InGameState)
 import Array exposing (fromList)
 import Matrix exposing (..)
 
+-- These functions apply gravity. First they push all tiles to empty tiles below them, and after
+-- that, if there's an empty column, they push the non-empty ones to the left (so that there are
+-- no empty columns in between).
+
 applyGravityToTiles: InGameState -> InGameState
 applyGravityToTiles gameState =
     {gameState | board =
@@ -74,6 +78,9 @@ addEmptyColumns columns board =
 setEmptyColumn: Int -> Board -> Board
 setEmptyColumn column board =
     List.foldr (\index newBoard -> set (loc column index) Empty newBoard) board [0..boardSize - 1]
+
+
+-- Convinience function to use on Lists.
 
 {-| The zip function takes in two lists and returns a combined
 list. It combines the elements of each list pairwise until one

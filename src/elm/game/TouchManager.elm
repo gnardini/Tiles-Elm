@@ -10,6 +10,7 @@ import Player exposing (Player)
 
 import Matrix exposing (..)
 
+-- When there's a click on the UI over the board, update the state accordingly.
 onTouchReceived : InGameState -> Int -> Int -> GameState
 onTouchReceived inGameState x y =
   applyTouch inGameState x y
