@@ -1,4 +1,4 @@
-module Player exposing (..)
+module Player exposing (Player, createPlayer, addPoints)
 
 type PlayerType = Human | AI
 
@@ -13,5 +13,5 @@ createPlayer = {
     points = 0 }
 
 addPoints: Player -> Int -> Player
-addPoints player movementPoints = 
+addPoints player movementPoints =
     {player | points = player.points + movementPoints}

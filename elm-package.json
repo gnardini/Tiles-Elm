@@ -5,7 +5,9 @@
     "license": "BSD3",
     "source-directories": [
         "./src/elm",
-        "./src/elm/ui"
+        "./src/elm/ui",
+        "./src/elm/game",
+        "./src/elm/menu"
     ],
     "exposed-modules": [],
     "dependencies": {

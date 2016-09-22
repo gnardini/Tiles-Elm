@@ -1,1 +1,1 @@
-var tilesElm = Elm.embed(Elm.App, document.getElementById('tiles'), {});
+Elm.embed(Elm.App, document.getElementById('tiles'), {});
