@@ -18,13 +18,13 @@ boardHtml : InGameState -> Html Action
 boardHtml inGameState =
   div
     [boardStyle]
-    [ div [scoreStyle] [text (playersText inGameState)]
-     , div [] (List.map htmlFromAttributes (stylesFromTiles inGameState.board))]
+    [ div [playerTurnStyle] [text ("Player " ++ toString inGameState.playerTurn ++ "'s turn")]
+    , div [scoreStyle] [text (playersText inGameState)]
+    , div [] (List.map htmlFromAttributes (stylesFromTiles inGameState.board))]
 
 stylesFromTiles : Matrix Tile -> List (List (Html.Attribute Action))
 stylesFromTiles tiles =
     flatten (mapWithLocation getTileAttributes tiles)
-
 
 getTileAttributes: Location -> Tile -> List (Html.Attribute Action)
 getTileAttributes location tile =
@@ -70,6 +70,15 @@ tileStyleList size marginTop marginLeft color =
   , ("marginTop", toString marginTop ++ "px")
   , ("marginLeft", toString marginLeft ++ "px")
   , ("backgroundColor", toRgbaString color)
+  ]
+
+playerTurnStyle : Html.Attribute msg
+playerTurnStyle = Html.Attributes.style (playerTurnStyleList 400)
+
+playerTurnStyleList : Int -> List (String, String)
+playerTurnStyleList width =
+  [("position", "relative")
+  , ("margin-left", toString (width // 2) ++ "px")
   ]
 
 playersText: InGameState -> String

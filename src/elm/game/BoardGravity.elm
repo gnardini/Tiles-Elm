@@ -3,7 +3,7 @@ module BoardGravity exposing (applyGravityToTiles)
 import Board exposing (Board, boardSize, boardTiles, getTileAt, unwrapTile)
 import Tile exposing (Tile (..))
 import Player exposing (Player)
-import GameState exposing (GameState (..), InGameState)
+import GameState exposing (ScreenState (..), InGameState)
 
 import Array exposing (fromList)
 import Matrix exposing (..)

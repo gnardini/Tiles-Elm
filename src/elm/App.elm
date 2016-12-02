@@ -1,23 +1,30 @@
-module App exposing (..)
+port module App exposing (..)
 
 import MenuUi exposing (menuHtml)
 import BoardUi exposing (boardHtml)
 
 import GameState exposing (..)
 import Action exposing (Action (..))
-import BoardGenerator exposing (initialInGameState)
 import MenuManager exposing (initialMenuState, updateMenu)
 import StateUpdateManager exposing (updateState)
 
 import Html exposing (Html)
 import Html.App
+import Random exposing (initialSeed)
+
+type alias Flags =
+    { startingSeed: Float
+    }
 
 init : (GameState, Cmd Action)
-init = (initialMenuState, Cmd.none)
+init = (
+    { screenState = initialMenuState
+    , seed = initialSeed (round 1234)
+    }, Cmd.none)
 
 view : GameState -> Html Action
 view gameState =
-    case gameState of
+    case gameState.screenState of
         InGame inGameState -> BoardUi.boardHtml inGameState
         Menu menuState -> MenuUi.menuHtml menuState
 

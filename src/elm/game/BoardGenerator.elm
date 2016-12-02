@@ -1,6 +1,6 @@
 module BoardGenerator exposing (initialInGameState)
 
-import GameState exposing (GameState (..))
+import GameState exposing (GameState, ScreenState (..))
 import Board exposing (Board, boardSize)
 import Tile exposing (Tile(..), colorsCount, intToTile)
 import Player exposing (createPlayer)
@@ -8,17 +8,19 @@ import Player exposing (createPlayer)
 import Random exposing (..)
 import Matrix exposing (fromList)
 
-initialInGameState : GameState
-initialInGameState =
+initialInGameState : GameState -> GameState
+initialInGameState gameState =
     let
-        (firstBoard, afterInitSeed) = initialBoard (initialSeed 1234)
-    in InGame
-    { board = firstBoard
-    , player1 = createPlayer
-    , player2 = createPlayer
-    , playerTurn = 1
-    , seed = afterInitSeed
-    }
+        (firstBoard, afterInitSeed) = initialBoard gameState.seed
+    in
+        { screenState = InGame
+            { board = firstBoard
+            , player1 = createPlayer
+            , player2 = createPlayer
+            , playerTurn = 1
+            }
+        , seed = afterInitSeed
+        }
 
 initialBoard: Seed -> (Board, Seed)
 initialBoard seed =

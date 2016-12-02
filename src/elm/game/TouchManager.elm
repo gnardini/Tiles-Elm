@@ -3,7 +3,7 @@ module TouchManager exposing (onTouchReceived)
 import BoardGravity exposing (applyGravityToTiles)
 import GameStateManager exposing (checkGameOver, updatedPlayer, turnPlayer)
 
-import GameState exposing (GameState (..), InGameState)
+import GameState exposing (GameState, ScreenState (..), InGameState)
 import Board exposing (Board, getTileAt)
 import Tile exposing (Tile (..))
 import Player exposing (Player)
@@ -11,7 +11,7 @@ import Player exposing (Player)
 import Matrix exposing (..)
 
 -- When there's a click on the UI over the board, update the state accordingly.
-onTouchReceived : InGameState -> Int -> Int -> GameState
+onTouchReceived : InGameState -> Int -> Int -> ScreenState
 onTouchReceived inGameState x y =
   applyTouch inGameState x y
     |> applyGravityToTiles
@@ -31,7 +31,6 @@ applyTouch originalState x y =
         , player1 = if originalState.playerTurn == 1 then newPlayer else originalState.player1
         , player2 = if originalState.playerTurn == 2 then newPlayer else originalState.player2
         , playerTurn = if originalState.playerTurn == 1 then 2 else 1
-        , seed = originalState.seed
         }
 
 

@@ -1,7 +1,7 @@
 module GameStateManager exposing (checkGameOver, updatedPlayer, turnPlayer)
 
 import Board exposing (Board, getTileAt, boardSize)
-import GameState exposing (GameState (..), InGameState)
+import GameState exposing (GameState, ScreenState (..), InGameState)
 import Tile exposing (Tile (..))
 import Player exposing (Player, addPoints)
 import Action exposing (Action (..))
@@ -20,7 +20,7 @@ turnPlayer gameState =
     then gameState.player1
     else gameState.player2
 
-checkGameOver : InGameState -> GameState
+checkGameOver : InGameState -> ScreenState
 checkGameOver inGameState =
     if (getTileAt inGameState.board 0 (boardSize - 1) == Empty)
     then Menu { text = "Play Again", winner = Just(winnerText inGameState) }
