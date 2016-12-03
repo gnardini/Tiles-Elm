@@ -2,5 +2,6 @@ git checkout --orphan gh-pages
 elm-make src/elm/App.elm --output=index.html
 git add index.html
 git commit -m "Creating github page"
-git push --set-upstream origin gh-pages
+git push -f --set-upstream origin gh-pages
 git checkout master
+git branch -D gh-pages
