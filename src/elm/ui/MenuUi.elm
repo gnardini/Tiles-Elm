@@ -1,7 +1,7 @@
 module MenuUi exposing(menuHtml)
 
 import BaseUi exposing (toRgbaString, centeredStyle)
-import Action exposing (Action)
+import Action exposing (Action (..), MenuAction (..))
 import GameState exposing (MenuState)
 
 import Color exposing (rgb)
@@ -18,7 +18,7 @@ menuButtonHeight = 100
 menuHtml : MenuState -> Html Action
 menuHtml menuState =
     Html.div
-    [menuStyle, Html.Events.onClick (Action.StartGame)]
+    [menuStyle, Html.Events.onClick (MenuAction StartGame)]
     [div [winnerTextStyle] [text (winnerText menuState.winner)]
     , div [playButtonStyle] [text menuState.text]]
 

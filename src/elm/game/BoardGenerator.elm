@@ -18,6 +18,7 @@ initialInGameState gameState =
             , player1 = createPlayer
             , player2 = createPlayer
             , playerTurn = 1
+            , mouseOver = Nothing
             }
         , seed = afterInitSeed
         }

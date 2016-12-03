@@ -6,10 +6,10 @@ import Html.Events exposing (onClick)
 import Html.Attributes
 import Color exposing (Color, rgb, rgba)
 
-import GameState exposing (InGameState)
+import GameState exposing (InGameState, Coordinate)
 import Board exposing (boardSize)
 import Tile exposing (Tile (..))
-import Action exposing (Action (..))
+import Action exposing (Action (..), GameAction (..))
 
 import List exposing (..)
 import Matrix exposing (..)
@@ -20,7 +20,9 @@ boardHtml inGameState =
     [boardStyle]
     [ div [playerTurnStyle] [text ("Player " ++ toString inGameState.playerTurn ++ "'s turn")]
     , div [scoreStyle] [text (playersText inGameState)]
-    , div [] (List.map htmlFromAttributes (stylesFromTiles inGameState.board))]
+    , div [] (List.map htmlFromAttributes (stylesFromTiles inGameState.board))
+    , div [mouseOverStyle inGameState.mouseOver] []
+    ]
 
 stylesFromTiles : Matrix Tile -> List (List (Html.Attribute Action))
 stylesFromTiles tiles =
@@ -28,8 +30,11 @@ stylesFromTiles tiles =
 
 getTileAttributes: Location -> Tile -> List (Html.Attribute Action)
 getTileAttributes location tile =
-    [Html.Attributes.style (tileStyle tile (row location) (col location)),
-    Html.Events.onClick (Choose (row location) (col location))]
+    [ Html.Attributes.style (tileStyle tile (row location) (col location))
+    , Html.Events.onClick (GameAction (Choose (row location) (col location)))
+    , Html.Events.onMouseEnter (GameAction (Hover (row location) (col location)))
+    , Html.Events.onMouseLeave (GameAction Unhover)
+    ]
 
 tileSizeInPx: Int
 tileSizeInPx = 50
@@ -84,3 +89,24 @@ playerTurnStyleList width =
 playersText: InGameState -> String
 playersText gameState =
     "Player 1: " ++ toString gameState.player1.points ++ " - Player2: " ++ toString gameState.player2.points
+
+mouseOverStyle: Maybe Coordinate -> Html.Attribute msg
+mouseOverStyle maybeCoordinate =
+  case maybeCoordinate of
+    Just coordinate -> Html.Attributes.style (mouseOverStyleList (tileSizeInPx - 10) (tileSizeInPx * coordinate.y) (tileSizeInPx * coordinate.x))
+    Nothing -> Html.Attributes.style []
+
+mouseOverStyleList: Int -> Int -> Int -> List (String, String)
+mouseOverStyleList size marginTop marginLeft =
+    [("position", "absolute")
+  , ("width", toString size ++ "px")
+  , ("height", toString size ++ "px")
+  , ("marginTop", toString marginTop ++ "px")
+  , ("marginLeft", toString marginLeft ++ "px")
+  , ("border-style", "solid")
+  , ("border-width", "5px")
+  , ("border-color", "black")
+  , ("pointer-events", "none")
+  ]
+
+

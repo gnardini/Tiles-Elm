@@ -27,7 +27,8 @@ applyTouch originalState x y =
             (newBoard, points) = onBoardTouched originalState.board x y (turnPlayer originalState)
             newPlayer = updatedPlayer originalState points
         in
-        { board = newBoard
+        { originalState
+        | board = newBoard
         , player1 = if originalState.playerTurn == 1 then newPlayer else originalState.player1
         , player2 = if originalState.playerTurn == 2 then newPlayer else originalState.player2
         , playerTurn = if originalState.playerTurn == 1 then 2 else 1

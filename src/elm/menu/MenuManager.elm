@@ -14,5 +14,5 @@ initialMenuState =
 updateMenu : Action -> GameState -> GameState
 updateMenu action gameState =
     case action of
-        Choose _ _ -> { gameState | screenState = initialMenuState } -- Shouldn't happen
-        StartGame -> initialInGameState gameState
+        GameAction gameAction -> { gameState | screenState = initialMenuState } -- Shouldn't happen
+        MenuAction menuAction -> initialInGameState gameState

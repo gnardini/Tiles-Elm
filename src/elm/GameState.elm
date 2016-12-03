@@ -12,11 +12,17 @@ type alias GameState =
   , seed: Seed
   }
 
+type alias Coordinate =
+  { x: Int
+  , y: Int
+  }
+
 type alias InGameState =
   { board: Board
   , player1: Player
   , player2: Player
   , playerTurn: Int
+  , mouseOver: Maybe Coordinate
   }
 
 type alias MenuState =
