@@ -10,7 +10,7 @@ import StateUpdateManager exposing (updateState)
 
 import Html exposing (Html)
 import Html.App
-import Random exposing (initialSeed)
+import Random exposing (initialSeed, minInt, maxInt)
 
 type alias Flags =
     { startingSeed: Float
@@ -20,7 +20,7 @@ init : (GameState, Cmd Action)
 init = (
     { screenState = initialMenuState
     , seed = initialSeed (round 1234)
-    }, Cmd.none)
+    }, Random.generate InitialSeed (Random.int minInt maxInt))
 
 view : GameState -> Html Action
 view gameState =
@@ -29,7 +29,10 @@ view gameState =
         Menu menuState -> MenuUi.menuHtml menuState
 
 update : Action -> GameState -> (GameState, Cmd Action)
-update action gameState = (updateState action gameState, Cmd.none)
+update action gameState =
+    case action of
+        InitialSeed seed -> ({ gameState | seed = initialSeed seed }, Cmd.none)
+        otherwise -> (updateState action gameState, Cmd.none)
 
 subscriptions : GameState -> Sub Action
 subscriptions model =

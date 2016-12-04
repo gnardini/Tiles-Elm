@@ -15,8 +15,9 @@ updateState action gameState =
 updateInGameState : Action -> GameState -> InGameState -> GameState
 updateInGameState action gameState inGameState =
     case action of
-      MenuAction menuAction -> initialInGameState gameState -- Shouldn't happen
       GameAction gameAction -> handleGameAction gameAction gameState inGameState
+      otherwise -> initialInGameState gameState -- Shouldn't happen
+
 
 handleGameAction: GameAction -> GameState -> InGameState -> GameState
 handleGameAction action gameState inGameState =
