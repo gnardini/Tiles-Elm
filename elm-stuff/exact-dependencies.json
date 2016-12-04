@@ -1,0 +1,13 @@
+{
+    "elm-community/elm-check": "1.0.2",
+    "chendrix/elm-matrix": "3.1.1",
+    "elm-community/elm-test": "1.1.0",
+    "elm-community/elm-lazy-list": "1.1.0",
+    "elm-community/shrink": "1.1.0",
+    "elm-lang/virtual-dom": "1.1.0",
+    "elm-community/random-extra": "1.0.0",
+    "elm-lang/lazy": "1.0.0",
+    "elm-lang/html": "1.1.0",
+    "elm-lang/trampoline": "1.0.0",
+    "elm-lang/core": "4.0.3"
+}
